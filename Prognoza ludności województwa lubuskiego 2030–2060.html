@@ -1,0 +1,152 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prognoza ludności województwa lubuskiego 2025–2060</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f2f4f9;--card:#fff;--tx:#1b2440;--mu:#5a6480;--gr:#e3e7f0;--bd:#d5dae6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1226;--card:#161d38;--tx:#e8ecf7;--mu:#a4adc8;--gr:#28315a;--bd:#2c3560}}
+:root[data-theme="dark"]{--bg:#0d1226;--card:#161d38;--tx:#e8ecf7;--mu:#a4adc8;--gr:#28315a;--bd:#2c3560}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Fira Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;line-height:1.45}
+header{background:#001d77;color:#fff;padding:28px clamp(16px,4vw,48px) 22px;border-bottom:6px solid #bed600}
+header h1{margin:0 0 6px;font-size:clamp(1.5rem,3.2vw,2.4rem);font-weight:600;line-height:1.15}
+header p{margin:0;color:#ccd1e3;font-size:1.05rem}
+main{max-width:1320px;margin:0 auto;padding:24px clamp(12px,3vw,32px) 40px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:var(--card);border:1px solid var(--bd);border-left:8px solid var(--c);border-radius:4px;padding:16px 18px}
+.kpi h3{margin:0;font-size:1rem;font-weight:500;color:var(--mu)}
+.kpi .v{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;color:var(--c);margin:4px 0 2px;line-height:1.15}
+.kpi .s{font-size:.95rem;color:var(--mu)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:4px;padding:18px 20px;grid-column:span 6;min-width:0}
+.card.w{grid-column:span 12}.card.t{grid-column:span 4}
+@media (max-width:900px){.card,.card.t{grid-column:span 12}}
+.card h2{margin:0 0 2px;font-size:1.2rem;font-weight:600;color:#001d77}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card h2{color:#8cb4ff}}
+:root[data-theme="dark"] .card h2{color:#8cb4ff}
+.card p.n{margin:0 0 10px;color:var(--mu);font-size:.95rem}
+.ch{position:relative;height:320px}.ch.tall{height:520px}
+.tabs{display:flex;gap:8px;margin:6px 0 10px}
+.tabs button{font:inherit;font-weight:600;padding:6px 18px;border:2px solid #007ac9;background:transparent;color:#007ac9;border-radius:4px;cursor:pointer}
+.tabs button.on{background:#007ac9;color:#fff}
+.tabs button:focus-visible{outline:3px solid #ff8200;outline-offset:2px}
+.concl{background:var(--card);border:1px solid var(--bd);border-top:6px solid #009aa6;border-radius:4px;padding:18px 24px;margin-top:16px}
+.concl h2{margin:0 0 8px;font-size:1.3rem;color:#009aa6}
+.concl ul{margin:0;padding-left:20px}.concl li{margin:6px 0;font-size:1.05rem}
+footer{margin-top:18px;color:var(--mu);font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+<h1>Prognoza ludności województwa lubuskiego na lata 2030–2060</h1>
+<p>Opracowana na bazie Narodowego Spisu Powszechnego 2021 · stan w dniu 31 XII</p>
+</header>
+<main>
+<section class="kpis" id="kpis"></section>
+<div class="grid">
+<div class="card w"><h2>Liczba ludności ogółem</h2><p class="n">Mężczyźni i kobiety, w osobach</p><div class="ch"><canvas id="c1"></canvas></div></div>
+<div class="card"><h2>Ludność według ekonomicznych grup wieku</h2><p class="n">Udział wieku przedprodukcyjnego (0–17), produkcyjnego (18–59/64) i poprodukcyjnego (60+/65+) w ludności ogółem</p><div class="ch"><canvas id="c2"></canvas></div></div>
+<div class="card"><h2>Wskaźnik obciążenia demograficznego</h2><p class="n">Osoby w wieku nieprodukcyjnym na 100 osób w wieku produkcyjnym</p><div class="ch"><canvas id="c3"></canvas></div></div>
+<div class="card"><h2>Ludność według biologicznych grup wieku</h2><p class="n">Wiek 0–14, 15–64 i 65+ lat, w osobach</p><div class="ch"><canvas id="c10"></canvas></div></div>
+<div class="card"><h2>Struktura wieku ludności</h2><p class="n">Udział grup wieku 0–14, 15–64 i 65+ lat w ludności ogółem</p><div class="ch"><canvas id="c11"></canvas></div></div>
+<div class="card"><h2>Udział osób w wieku 65 lat i więcej</h2><p class="n">Odsetek ludności ogółem</p><div class="ch"><canvas id="c4"></canvas></div></div>
+<div class="card"><h2>Udział osób w wieku 85 lat i więcej</h2><p class="n">Odsetek ludności ogółem</p><div class="ch"><canvas id="c5"></canvas></div></div>
+<div class="card w"><h2>Piramida wieku ludności</h2><p class="n">Pięcioletnie grupy wieku, mężczyźni (po lewej) i kobiety (po prawej)</p>
+<div class="tabs" id="tabs"><button data-y="2025" class="on">2025</button><button data-y="2040">2040</button><button data-y="2060">2060</button></div>
+<div class="ch tall"><canvas id="c6"></canvas></div></div>
+<div class="card w"><h2>Wskaźnik feminizacji</h2><p class="n">Liczba kobiet przypadająca na 100 mężczyzn: w ludności ogółem i w wieku 65+</p><div class="ch"><canvas id="c12"></canvas></div></div>
+<div class="card t"><h2>Ruch naturalny</h2><p class="n">Urodzenia, zgony i przyrost naturalny</p><div class="ch"><canvas id="c7"></canvas></div></div>
+<div class="card t"><h2>Saldo migracji na pobyt stały</h2><p class="n">Napływ minus odpływ (wewnętrzne) i imigracja minus emigracja (zagraniczne)</p><div class="ch"><canvas id="c8"></canvas></div></div>
+<div class="card t"><h2>Kobiety w wieku 15–49 lat</h2><p class="n">Potencjał rozrodczy populacji</p><div class="ch"><canvas id="c9"></canvas></div></div>
+</div>
+<section class="concl"><h2>Najważniejsze wnioski</h2><ul id="concl"></ul></section>
+<footer>Źródło: GUS, Prognoza ludności dla województwa lubuskiego na lata 2030–2060 (opracowana na bazie NSP 2021). * 2025 – dane empiryczne, 2030–2060 – prognoza.</footer>
+</main>
+<script>
+const L=['2025*','2030','2035','2040','2045','2050','2055','2060'];
+const D={tot:[963601,954392,927606,896868,863960,830371,796266,761226],
+m:[467124,459842,445891,430705,415031,399369,383241,366356],
+k:[496477,494550,481715,466163,448929,431002,413025,394870],
+pre:[166208,151496,134359,125108,123842,122614,118670,111498],
+prod:[559317,556387,539300,503614,455368,413146,384986,368443],
+post:[238076,246509,253947,268146,284750,294611,292610,281285],
+a65:[208163,218853,220599,229262,244666,261336,265522,259073],
+a85:[18984,19251,30973,42182,48004,45290,43106,48429],
+w:[216424,203828,184495,167031,154824,147715,142528,133669],
+b:[5445,6482,6484,6639,6526,5996,5340,4889],
+d:[10829,11577,12491,13198,13544,13216,12875,12645],
+ni:[10334,10331,9962,9623,9307,8917,8444,7975],
+no:[11374,10624,10209,9930,9544,8972,8364,7870],
+im:[732,1646,863,903,926,949,966,978],
+em:[343,434,411,402,395,391,387,379]};
+const P={2025:[[16732,24533,26377,28304,23109,24611,28735,35279,43190,41320,35034,27396,27318,30745,25937,17759,5764,3404,1276,255,46],
+[16020,23376,24903,26946,22310,22885,27269,34314,42038,40662,34624,28240,29913,36848,34820,26170,11136,8779,4100,998,126]],
+2040:[[17262, 17566, 18104, 19514, 25273, 26336, 27234, 22231, 23985, 28585, 34033, 39840, 36103, 28220, 19941, 17129, 15633, 9379, 3715, 516, 106],
+[16322, 16521, 17049, 18805, 24279, 25008, 26096, 21696, 22985, 28162, 34565, 41168, 38884, 31987, 24776, 23962, 25432, 18143, 8363, 1570, 390]],
+2060:[[13471,15593,17383,18224,17988,17645,17876,19101,24425,25359,26079,21013,21588,23698,25305,25547,18833,10603,4440,1664,521],
+[12769,14696,16340,17241,17119,16726,16880,18262,23287,24154,25492,21230,22212,26245,30345,33199,27472,17493,8562,3789,1357]]};
+const AG=[...Array(20)].map((_,i)=>`${i*5}–${i*5+4}`).concat('100+');
+const cs=getComputedStyle(document.documentElement),tx=cs.getPropertyValue('--tx').trim(),gr=cs.getPropertyValue('--gr').trim();
+Chart.defaults.color=tx;Chart.defaults.font.family="'Fira Sans',system-ui,sans-serif";Chart.defaults.font.size=13;Chart.defaults.borderColor=gr;
+const fp=n=>n.toLocaleString('pl-PL',{minimumFractionDigits:1,maximumFractionDigits:1})+'%',f=n=>n.toLocaleString('pl-PL'),fa=n=>f(Math.abs(n));
+const pc=x=>(x*100).toFixed(1).replace('.',',')+'%';
+const sp=x=>(x<0?'−':'+')+pc(Math.abs(x));
+const sg=n=>(n<0?'−':'+')+fa(n);
+const G={green:'#69be28',dg:'#008542',blue:'#007ac9',navy:'#001d77',teal:'#009aa6',violet:'#522398',orange:'#ff8200',red:'#ff0600',pink:'#c64771',lime:'#bed600'};
+const VL={id:'vl',afterDatasetsDraw(c){const x=c.ctx;x.save();x.fillStyle=tx;x.font='600 12px Fira Sans,sans-serif';x.textAlign='center';c.getDatasetMeta(0).data.forEach((e,i)=>x.fillText(c.data.datasets[0].fmt?c.data.datasets[0].fmt(c.data.datasets[0].data[i]):f(c.data.datasets[0].data[i]),e.x,e.y-8));x.restore()}};
+function mk(id,type,ds,o={}){return new Chart(document.getElementById(id),{type,data:{labels:L,datasets:ds},plugins:o.vl?[VL]:[],options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:o.vl?22:0}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:ds.length>1,position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(o.pct?fp(c.parsed.y):f(c.parsed.y))}}},scales:{x:{stacked:o.st,grid:{display:false}},y:{stacked:o.st,beginAtZero:true,grid:{color:gr},ticks:{callback:v=>o.pct?fp(v):o.k?v/1000+' tys.':f(v)}}}}})}
+const bar=(l,d,c)=>({label:l,data:d,backgroundColor:c});
+const line=(l,d,c)=>({type:'line',label:l,data:d,borderColor:c,backgroundColor:c,tension:.25,borderWidth:3,pointRadius:4});
+const dep=D.tot.map((t,i)=>+((D.pre[i]+D.post[i])/D.prod[i]*100).toFixed(1));
+const nat=D.b.map((b,i)=>b-D.d[i]);
+const mi=D.ni.map((v,i)=>v-D.no[i]),mf=D.im.map((v,i)=>v-D.em[i]),mt=mi.map((v,i)=>v+mf[i]);
+mk('c1','bar',[bar('Mężczyźni',D.m,G.blue),bar('Kobiety',D.k,G.teal)],{st:1,k:1});
+const sh=a=>a.map((v,i)=>+(v/D.tot[i]*100).toFixed(1));
+const ce=mk('c2','bar',[bar('Przedprodukcyjny (0–17)',sh(D.pre),G.green),bar('Produkcyjny (18–59/64)',sh(D.prod),G.blue),bar('Poprodukcyjny (60+/65+)',sh(D.post),G.orange)],{st:1,pct:1});
+ce.options.scales.y.max=100;ce.update();
+mk('c3','line',[line('Wskaźnik obciążenia',dep,G.navy)],{vl:1});
+const p65=D.a65.map((v,i)=>+(v/D.tot[i]*100).toFixed(1)),p85=D.a85.map((v,i)=>+(v/D.tot[i]*100).toFixed(1));
+const g14=[131941,120590,105837,102824,102792,101804,97468,90252],g1564=[623497,614949,601170,564782,516502,467231,433276,411901],g65=[208163,218853,220599,229262,244666,261336,265522,259073];
+const gc=[['0–14 lat',g14,G.green],['15–64 lata',g1564,G.blue],['65 lat i więcej',g65,G.violet]];
+mk('c10','bar',gc.map(x=>bar(x[0],x[1],x[2])),{st:1,k:1});
+const c11=mk('c11','bar',gc.map(x=>bar(x[0],x[1].map((v,i)=>+(v/D.tot[i]*100).toFixed(1)),x[2])),{st:1,pct:1});
+c11.options.scales.y.max=100;c11.update();
+const m65=[85186,89564,90114,94639,102606,111275,113518,110611],k65=[122977,129289,130485,134623,142060,150061,152004,148462];
+const fem=D.k.map((v,i)=>+(v/D.m[i]*100).toFixed(1)),fem65=k65.map((v,i)=>+(v/m65[i]*100).toFixed(1));
+const fm=n=>n.toLocaleString('pl-PL',{minimumFractionDigits:1,maximumFractionDigits:1});
+const c12=mk('c12','line',[{...line('Ogółem',fem,G.navy),fmt:fm},line('Osoby w wieku 65+',fem65,G.violet)],{vl:1});
+c12.options.scales.y.beginAtZero=false;c12.options.scales.y.min=100;c12.options.scales.y.max=150;c12.update();
+mk('c4','bar',[{...bar('Udział osób 65+',p65,G.violet),fmt:fp}],{vl:1,pct:1});
+mk('c5','bar',[{...bar('Udział osób 85+',p85,G.pink),fmt:fp}],{vl:1,pct:1});
+mk('c7','bar',[bar('Urodzenia',D.b,G.dg),bar('Zgony',D.d,G.red),line('Przyrost naturalny',nat,G.navy)]);
+mk('c8','bar',[bar('Saldo migracji wewnętrznych',mi,G.blue),bar('Saldo migracji zagranicznych',mf,G.lime),line('Saldo łączne',mt,G.navy)],{st:1});
+mk('c9','bar',[bar('Kobiety 15–49 lat',D.w,G.teal)],{vl:1,k:0});
+const py=new Chart(document.getElementById('c6'),{type:'bar',data:{labels:AG.slice().reverse(),datasets:[{label:'Mężczyźni',data:[],backgroundColor:G.blue},{label:'Kobiety',data:[],backgroundColor:G.orange}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,categoryPercentage:.95,barPercentage:.95,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fa(c.parsed.x)}}},scales:{x:{stacked:true,min:-50000,max:50000,grid:{color:gr},ticks:{callback:v=>fa(v)}},y:{stacked:true,grid:{display:false},ticks:{autoSkip:false,font:{size:12}}}}}});
+function setY(y){const [m,k]=P[y];py.data.datasets[0].data=m.map(v=>-v).reverse();py.data.datasets[1].data=k.slice().reverse();py.update();document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.y==y))}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setY(b.dataset.y));setY(2025);
+const s65=D.a65.map((v,i)=>v/D.tot[i]),z=7;
+const K=[['Ludność w 2060 r.',f(D.tot[z]),sp(D.tot[z]/D.tot[0]-1)+' wobec 2025 r. ('+sg(D.tot[z]-D.tot[0])+' osób)',G.navy],
+['Udział osób w wieku 65+',pc(s65[0])+' → '+pc(s65[z]),'w 2025 i 2060 r.',G.violet],
+['Osoby w wieku 85+',f(D.a85[0])+' → '+f(D.a85[z]),'wzrost ok. '+(D.a85[z]/D.a85[0]).toFixed(1).replace('.',',')+'-krotny',G.pink],
+['Wiek produkcyjny (18–59/64)',f(D.prod[0])+' → '+f(D.prod[z]),sp(D.prod[z]/D.prod[0]-1)+' do 2060 r.',G.blue]];
+document.getElementById('kpis').innerHTML=K.map(k=>`<div class="kpi" style="--c:${k[3]}"><h3>${k[0]}</h3><div class="v">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
+document.getElementById('concl').innerHTML=[
+`Liczba ludności województwa spada w każdym okresie prognozy: z ${f(D.tot[0])} w 2025 r. do ${f(D.tot[z])} w 2060 r. (${sp(D.tot[z]/D.tot[0]-1)}).`,
+`Społeczeństwo się starzeje: udział osób w wieku 65+ rośnie z ${pc(s65[0])} do ${pc(s65[z])}, a liczba osób w wieku 85+ z ${f(D.a85[0])} do ${f(D.a85[z])}.`,
+`Na 100 osób w wieku produkcyjnym przypada coraz więcej osób w wieku nieprodukcyjnym: ${String(dep[0]).replace('.',',')} w 2025 r. i ${String(dep[z]).replace('.',',')} w 2060 r.`,
+`Zgonów jest więcej niż urodzeń w całym okresie (przyrost naturalny: ${sg(nat[0])} w 2025 r., ${sg(nat[z])} w 2060 r.); saldo migracji na pobyt stały (${sg(mt[0])} w 2025 r., ${sg(mt[z])} w 2060 r.) tego nie równoważy.`,
+`Wskaźnik feminizacji (kobiety na 100 mężczyzn) utrzymuje się na poziomie 106–108 (${fm(fem[0])} w 2025 r., ${fm(fem[7])} w 2060 r.); wśród osób w wieku 65+ jest znacznie wyższy, choć spada z ${fm(fem65[0])} do ${fm(fem65[7])}.`,
+`Liczba osób w wieku 0–14 lat spada z ${f(g14[0])} do ${f(g14[7])} (${sp(g14[7]/g14[0]-1)}), a w wieku 15–64 lat z ${f(g1564[0])} do ${f(g1564[7])} (${sp(g1564[7]/g1564[0]-1)}).`,
+`Liczba kobiet w wieku 15–49 lat maleje z ${f(D.w[0])} do ${f(D.w[z])}, co ogranicza możliwość odbudowy liczby urodzeń.`
+].map(t=>`<li>${t}</li>`).join('');
+</script>
+</body>
+</html>
+
+</body></html>
